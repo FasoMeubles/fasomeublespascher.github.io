@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FASO MEUBLES PAS CHER - Application Web Professionnelle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Configuration des couleurs basées sur le logo (Orange, Or, Teal/Cyan) */
+        :root {
+            --color-brand-orange: #f97316; /* Orange Vif */
+            --color-brand-yellow: #facc15; /* Or/Jaune */
+            --color-brand-teal: #0e7490;    /* Cyan/Bleu-Vert (BLEU pour FASO MEUBLES) */
+            --color-brand-red: #dc2626;     /* ROUGE pour PAS CHER */
+            --color-footer: #1f2937;        /* Gris Foncé Élégant pour le Footer */
+        }
+        
+        /* Arrière-plan plat et blanc comme demandé */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* Fond bien plan blanc */
+        }
+
+        /* Styles pour la navigation (simuler des pages) */
+        .nav-tab.active {
+            color: var(--color-brand-teal);
+            border-bottom: 3px solid var(--color-brand-orange);
+            font-weight: 700;
+        }
+
+        /* Styles pour l'effet 3D des blocs de service (Légèrement bombé) */
+        .service-block, .photo-block {
+            transform: perspective(1000px) rotateX(0deg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-block:hover {
+            transform: translateY(-4px) perspective(1000px) rotateX(0.5deg); 
+            box-shadow: 0 15px 25px -8px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Style pour l'effet d'ouverture/fermeture (Door Opening Effect) */
+        .content-hidden {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding: 0 1.5rem;
+            transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease; 
+        }
+        .content-visible {
+            max-height: 1000px; /* Assure l'ouverture complète */
+            opacity: 1;
+            padding: 1.5rem;
+        }
+        .chevron {
+            transition: transform 0.3s ease;
+        }
+        .block-header.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Styles pour les icônes sociales flottantes (Plus Grandes et Visibles) */
+        .social-float {
+            position: fixed;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Espace augmenté */
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .social-icon {
+            width: 55px; /* Taille augmentée */
+            height: 55px; /* Taille augmentée */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Ombre renforcée */
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .social-icon:hover {
+            transform: scale(1.15); /* Effet zoom plus marqué */
+        }
+    </style>
+</head>
+<body class="text-gray-900">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+            
+            <div class="flex items-center space-x-3">
+                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+PHJlY3QgeD0iNSIgeT0iNSIgd2lkdGg9IjEwIiBoZWlnaHQ9IjQwIiBmaWxsPSJyZ2IoMjQ5LCAxMTUsIDIyKSIvPjxyZWN0IHg9IjIwIiB5PSI1IiB3aWR0aD0iMTAiIGhlaWdodD0iNDAiIGZpbGw9InJnYigyNTAsIDE4NywgMjMpIi8+PHJlY3QgeD0iMzUiIHk9IjUiIHdpZHRoPSIxMCIgaGVpZ2h0PSI0MCIgZmlsbD0icmdiKDE0LCAxMTYsIDE0NCkiLz48cGF0aCBkPSJNMjUgMThsLTQgMi41LTQuNCA2LjIgMCA0LjcgNi41IDQuNCA2LjUgLTQuNCAtMC40IC00LjUgLTQuNiAtNi4zIDQtMi40eiIgZmlsbD0iI2ZmZiIvPjxwYXRoIGQ9Ik0yNSA1Yy0xLjMgMC0yLjUgLjctMy4xIDEuOC0uOSAxLjctLjMgMy44IDEgNC45IDEuMyAxLjEgMy4zIDEuMyA0LjYgLjQgMS4yLS44IDEuNy0yLjMgMS4yLTMuNi0uNS0uOC0xLjUtMS41LTIuNy0xLjVsMi4zLS43LS41LS41ek0yMy45IDkuMWwtMi43IDUtMy42LTIuMy0uNyAzLjItMi4zIDEuMi0uNCA0LjEtMS41LjE5NS0uNCg0LjE3MS43IDEuN3oiIGZpbGw9IiNmZmYiLz48L3N2Zz4=" 
+                     alt="Logo FASO MEUBLES PAS CHER" class="w-12 h-12 object-contain">
+                <span class="text-3xl font-black tracking-wider">
+                    <span style="color: var(--color-brand-teal);">FASO MEUBLES</span> 
+                    <span style="color: var(--color-brand-red);">PAS CHER</span>
+                </span>
+            </div>
+
+            <div class="hidden sm:flex space-x-4 items-center">
+                <a href="https://www.facebook.com/profile.php?id=100064332810418" target="_blank" aria-label="Facebook"
+                    class="p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition duration-300 shadow-md">
+                    <i data-lucide="facebook" class="w-6 h-6"></i>
+                </a>
+                <a href="https://wa.me/22670372933" target="_blank" aria-label="WhatsApp de l'entreprise"
+                    class="p-3 rounded-full bg-green-500 hover:bg-green-600 text-white transition duration-300 shadow-md">
+                    <i data-lucide="message-square" class="w-6 h-6"></i>
+                </a>
+            </div>
+        </div>
+
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-gray-100">
+            <div class="flex space-x-6 md:space-x-10 text-lg font-medium text-gray-500">
+                <button class="nav-tab py-3 transition duration-300" data-page="home" onclick="showPage('home')">ACCUEIL</button>
+                <button class="nav-tab py-3 transition duration-300" data-page="services" onclick="showPage('services')">NOS SERVICES</button>
+                <button class="nav-tab py-3 transition duration-300" data-page="photos" onclick="showPage('photos')">PHOTOS</button>
+                <button class="nav-tab py-3 transition duration-300" data-page="about" onclick="showPage('about')">À PROPOS</button>
+                <button class="nav-tab py-3 transition duration-300" data-page="contact" onclick="showPage('contact')">CONTACT</button>
+            </div>
+        </nav>
+    </header>
+    
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <div class="social-float sm:hidden">
+             <a href="https://www.facebook.com/profile.php?id=100064332810418" target="_blank" aria-label="Facebook"
+               class="social-icon bg-blue-600 text-white">
+                 <i data-lucide="facebook" class="w-8 h-8"></i>
+            </a>
+            <a href="https://wa.me/22670372933" target="_blank" aria-label="WhatsApp de l'entreprise"
+               class="social-icon bg-green-500 text-white">
+                <i data-lucide="message-square" class="w-8 h-8"></i>
+            </a>
+        </div>
+
+
+        <section id="page-home" class="page-content">
+            <h1 class="text-5xl font-extrabold mb-6 text-center" style="color: var(--color-brand-orange);">
+                BIENVENUE CHEZ <span style="color: var(--color-brand-teal);">FASO MEUBLES</span> <span style="color: var(--color-brand-red);">PAS CHER</span>
+            </h1>
+            <p class="text-xl text-center text-gray-700 max-w-4xl mx-auto mb-10">
+                Votre partenaire de confiance pour des meubles de haute qualité, alliant design international (Turc, Dubaï, Européen) et excellence de la fabrication locale.
+            </p>
+
+            <div class="bg-yellow-50 p-6 md:p-10 rounded-xl shadow-inner border-l-8 border-r-8 text-center" style="border-color: var(--color-brand-teal);">
+                <h2 class="text-3xl font-bold mb-4" style="color: var(--color-brand-teal);">
+                    Notre Engagement : Qualité et Professionnalisme
+                </h2>
+                <p class="text-xl font-semibold text-gray-800">
+                    Chaque pièce est garantie 18 mois. Notre objectif est de rendre votre entreprise crédible et professionnelle, en fournissant des intérieurs élégants et durables.
+                </p>
+            </div>
+        </section>
+
+        <section id="page-services" class="page-content hidden">
+            <h2 class="text-4xl font-bold text-center mb-10" style="color: var(--color-brand-orange);">
+                NOS STYLES ET NOS EXPERTISES
+            </h2>
+            
+            <div class="space-y-8">
+                
+                <div class="service-block bg-white border-4 p-0 rounded-2xl overflow-hidden cursor-pointer shadow-lg" 
+                     style="border-color: var(--color-brand-red);" onclick="toggleContent(this)">
+                    <div class="block-header flex justify-between items-center p-6 transition duration-300"
+                          style="background-color: var(--color-brand-orange); color: white;">
+                        <h3 class="text-2xl font-bold flex items-center">
+                            <i data-lucide="sofa" class="w-7 h-7 mr-3"></i>
+                            1. Fabrication de Salons et Canapés
+                        </h3>
+                        <i data-lucide="chevron-down" class="chevron w-6 h-6 text-white"></i>
+                    </div>
+                    <div class="content-hidden bg-white text-black">
+                        <p class="mb-4 text-lg">
+                            Nous sommes spécialisés dans la réalisation de salons sur-mesure, adaptés à vos goûts et votre espace. Notre expertise inclut :
+                        </p>
+                        <ul class="list-disc ml-8 space-y-2 text-gray-700">
+                            <li><strong>Styles Turcs et Dubaï :</strong> Pour un luxe et un confort inégalés, utilisant des matériaux nobles.</li>
+                            <li><strong>Design Européen :</strong> Pour des lignes épurées et une fonctionnalité maximale.</li>
+                            <li><strong>Service Professionnel :</strong> Conseil en aménagement et respect des délais.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-block bg-white border-4 p-0 rounded-2xl overflow-hidden cursor-pointer shadow-lg" 
+                     style="border-color: var(--color-brand-red);" onclick="toggleContent(this)">
+                    <div class="block-header flex justify-between items-center p-6 transition duration-300"
+                          style="background-color: var(--color-brand-yellow); color: #1f2937;">
+                        <h3 class="text-2xl font-bold flex items-center">
+                            <i data-lucide="bed" class="w-7 h-7 mr-3"></i>
+                            2. Lits, Matelas et Aménagement de Chambres
+                        </h3>
+                        <i data-lucide="chevron-down" class="chevron w-6 h-6 text-gray-800"></i>
+                    </div>
+                    <div class="content-hidden bg-white text-black">
+                        <p class="mb-4 text-lg">
+                            Nous créons votre espace de repos idéal, en alliant esthétique et bien-être :
+                        </p>
+                        <ul class="list-disc ml-8 space-y-2 text-gray-700">
+                            <li>Fabrication de lits capitonnés, lits modernes et lits en bois massif.</li>
+                            <li>Matelas ergonomiques de haute qualité pour un sommeil optimal.</li>
+                            <li>Armoires, coiffeuses et tables de chevet coordonnées.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-block bg-white border-4 p-0 rounded-2xl overflow-hidden cursor-pointer shadow-lg" 
+                     style="border-color: var(--color-brand-red);" onclick="toggleContent(this)">
+                    <div class="block-header flex justify-between items-center p-6 transition duration-300"
+                          style="background-color: var(--color-brand-teal); color: white;">
+                        <h3 class="text-2xl font-bold flex items-center">
+                            <i data-lucide="table" class="w-7 h-7 mr-3"></i>
+                            3. Salles à Manger et Décoration
+                        </h3>
+                        <i data-lucide="chevron-down" class="chevron w-6 h-6 text-white"></i>
+                    </div>
+                    <div class="content-hidden bg-white text-black">
+                        <p class="mb-4 text-lg">
+                            Nous complétons votre intérieur avec des pièces d'ameublement et de décoration :
+                        </p>
+                        <ul class="list-disc ml-8 space-y-2 text-gray-700">
+                            <li>Tables à manger de toutes tailles (extensibles, rondes, rectangulaires).</li>
+                            <li>Mobilier de bureau et solutions de rangement.</li>
+                            <li>Objets de décoration (luminaires, miroirs, tapis) pour la touche finale professionnelle.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-photos" class="page-content hidden">
+            <h2 class="text-4xl font-bold text-center mb-10" style="color: var(--color-brand-teal);">
+                NOTRE SAVOIR-FAIRE EN IMAGES
+            </h2>
+            <p class="text-center text-lg mb-8 text-gray-700 max-w-3xl mx-auto">
+                Cliquez sur chaque bloc pour voir une description détaillée des éléments qui composent nos réalisations.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <div class="photo-block bg-white rounded-3xl overflow-hidden shadow-2xl cursor-pointer border-4 border-white hover:border-gray-200"
+                    onclick="toggleContent(this)">
+                    <div class="block-header">
+                        <img src="https://placehold.co/600x400/facc15/444?text=Salon+Design+Turc" 
+                             alt="Exemple de Salon Style Turc" class="w-full h-auto object-cover aspect-video transition duration-300">
+                        <div class="p-4 bg-gray-100 text-center font-bold text-xl flex justify-between items-center">
+                            <span>Salon Design Turc Moderne</span>
+                            <i data-lucide="chevron-down" class="chevron w-6 h-6 text-gray-800"></i>
+                        </div>
+                    </div>
+                    <div class="content-hidden bg-gray-50 text-black p-0">
+                        <div class="p-6">
+                            <p class="mb-3 font-semibold text-lg" style="color: var(--color-brand-orange);">Description du Bloc :</p>
+                            <p class="text-gray-700 mb-4">
+                                Un ensemble de salon luxueux, combinant des formes classiques et contemporaines. Idéal pour un grand espace de vie.
+                            </p>
+                            <p class="mb-2 font-semibold" style="color: var(--color-brand-teal);">Éléments Contenus :</p>
+                            <ul class="list-disc ml-6 text-sm text-gray-600 space-y-1">
+                                <li><strong>Canapé d'angle</strong> (avec fonction lit)</li>
+                                <li>Deux <strong>Fauteuils</strong> individuels capitonnés</li>
+                                <li><strong>Table basse</strong> en marbre synthétique</li>
+                                <li><strong>Tapis</strong> de grande qualité</li>
+                                <li><strong>Meuble TV</strong> mural</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="photo-block bg-white rounded-3xl overflow-hidden shadow-2xl cursor-pointer border-4 border-white hover:border-gray-200"
+                    onclick="toggleContent(this)">
+                    <div class="block-header">
+                        <img src="https://placehold.co/600x400/f97316/ffffff?text=Lit+Moderne+Dubaï" 
+                             alt="Exemple de Lit Style Moderne Dubaï" class="w-full h-auto object-cover aspect-video transition duration-300">
+                        <div class="p-4 bg-gray-100 text-center font-bold text-xl flex justify-between items-center">
+                            <span>Chambre à Coucher Confort</span>
+                            <i data-lucide="chevron-down" class="chevron w-6 h-6 text-gray-800"></i>
+                        </div>
+                    </div>
+                    <div class="content-hidden bg-gray-50 text-black p-0">
+                        <div class="p-6">
+                            <p class="mb-3 font-semibold text-lg" style="color: var(--color-brand-orange);">Description du Bloc :</p>
+                            <p class="text-gray-700 mb-4">
+                                Une chambre principale conçue pour le bien-être et le rangement, dans un style minimaliste et moderne.
+                            </p>
+                            <p class="mb-2 font-semibold" style="color: var(--color-brand-teal);">Éléments Contenus :</p>
+                            <ul class="list-disc ml-6 text-sm text-gray-600 space-y-1">
+                                <li><strong>Lit double</strong> (Queen Size) avec tête de lit capitonnée</li>
+                                <li><strong>Armoire penderie</strong> à portes coulissantes</li>
+                                <li>Deux <strong>Tables de chevet</strong> suspendues</li>
+                                <li><strong>Coiffeuse</strong> avec miroir intégré</li>
+                                <li><strong>Matelas ergonomique</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="photo-block bg-white rounded-3xl overflow-hidden shadow-2xl cursor-pointer border-4 border-white hover:border-gray-200"
+                    onclick="toggleContent(this)">
+                    <div class="block-header">
+                        <img src="https://placehold.co/600x400/0e7490/ffffff?text=Mobilier+de+Bureau" 
+                             alt="Exemple de Mobilier de Bureau" class="w-full h-auto object-cover aspect-video transition duration-300">
+                        <div class="p-4 bg-gray-100 text-center font-bold text-xl flex justify-between items-center">
+                            <span>Mobilier de Bureau Pro</span>
+                            <i data-lucide="chevron-down" class="chevron w-6 h-6 text-gray-800"></i>
+                        </div>
+                    </div>
+                    <div class="content-hidden bg-gray-50 text-black p-0">
+                        <div class="p-6">
+                            <p class="mb-3 font-semibold text-lg" style="color: var(--color-brand-orange);">Description du Bloc :</p>
+                            <p class="text-gray-700 mb-4">
+                                Solution complète pour un espace de travail professionnel, garantissant productivité et élégance.
+                            </p>
+                            <p class="mb-2 font-semibold" style="color: var(--color-brand-teal);">Éléments Contenus :</p>
+                            <ul class="list-disc ml-6 text-sm text-gray-600 space-y-1">
+                                <li>Grand <strong>Bureau</strong> de direction</li>
+                                <li><strong>Fauteuil de bureau</strong> ergonomique</li>
+                                <li><strong>Chaises</strong> visiteurs (x2)</li>
+                                <li><strong>Bibliothèque</strong> / Étagère de rangement modulaire</li>
+                                <li><strong>Caisson mobile</strong> à tiroirs</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-center mt-10 text-lg font-semibold" style="color: var(--color-brand-orange);">
+                Pour une galerie complète, visitez notre page Facebook !
+            </p>
+        </section>
+        
+        <section id="page-about" class="page-content hidden">
+            <h2 class="text-4xl font-bold mb-8" style="color: var(--color-brand-orange);">
+                NOTRE HISTOIRE ET NOTRE VISION
+            </h2>
+            <div class="space-y-6 text-lg text-gray-700">
+                <p>
+                    <strong><span style="color: var(--color-brand-teal);">FASO MEUBLES</span> <span style="color: var(--color-brand-red);">PAS CHER</span></strong> est née de la volonté de combler le fossé entre la qualité internationale et l'accessibilité locale. Notre mission est de fournir des meubles qui transforment votre maison ou bureau en un espace de luxe et de confort sans compromis sur la durabilité.
+                </p>
+                <p>
+                    Nous sommes fiers d'intégrer des techniques de fabrication moderne, tout en valorisant l'artisanat local. Chaque meuble est conçu pour durer, c'est pourquoi nous offrons une garantie de 18 mois, témoin de notre confiance dans la robustesse de nos produits.
+                </p>
+                <p class="font-semibold italic" style="color: var(--color-brand-teal);">
+                    "Le roi des meubles" — parce que nous traitons chaque client comme une royauté, en leur offrant le meilleur de l'ameublement.
+                </p>
+            </div>
+        </section>
+
+        <section id="page-contact" class="page-content hidden">
+            <h2 class="text-4xl font-bold text-center mb-10" style="color: var(--color-brand-teal);">
+                CONTACTEZ-NOUS POUR UN DEVIS
+            </h2>
+            
+            <div class="max-w-3xl mx-auto p-8 rounded-xl shadow-2xl bg-white border-t-8 border-b-8" style="border-color: var(--color-brand-orange);">
+                <p class="text-xl text-center mb-6 font-medium text-gray-800">
+                    Notre équipe professionnelle est prête à répondre à toutes vos questions.
+                </p>
+
+                <div class="space-y-4 mb-8 text-center">
+                    
+                    <h3 class="text-2xl font-bold mb-4" style="color: var(--color-brand-teal);">NOS ADRESSES</h3>
+                    
+                    <div class="flex items-center justify-center space-x-3 text-lg">
+                        <i data-lucide="map-pin" class="w-6 h-6 text-red-600"></i>
+                        <span class="font-bold">Showroom Principal :</span>
+                        <span class="text-gray-700 font-extrabold">OUAGADOUGOU - CISSIN</span>
+                    </div>
+                    <div class="flex items-center justify-center space-x-3 text-lg">
+                        <i data-lucide="map-pin" class="w-6 h-6 text-red-600"></i>
+                        <span class="font-bold">Succursale :</span>
+                        <span class="text-gray-700 font-extrabold">KOURITENGA</span>
+                    </div>
+
+                    <h3 class="text-2xl font-bold mt-8 mb-4" style="color: var(--color-brand-teal);">CONTACT ENTREPRISE</h3>
+
+                    <div class="flex items-center justify-center space-x-3 text-lg">
+                        <i data-lucide="message-square" class="w-6 h-6 text-green-600"></i>
+                        <span class="font-bold">WhatsApp :</span>
+                        <a href="https://wa.me/22670372933" target="_blank" class="hover:underline font-extrabold text-green-600">
+                            +226 70 37 29 33
+                        </a>
+                    </div>
+                    
+                    <div class="flex items-center justify-center space-x-3 text-lg">
+                        <i data-lucide="phone" class="w-6 h-6" style="color: var(--color-brand-orange);"></i>
+                        <span class="font-bold">Téléphone :</span>
+                        <a href="tel:+22670001114" class="hover:underline font-extrabold text-gray-700">
+                            +226 70 00 11 14
+                        </a>
+                    </div>
+                    
+                    <div class="flex items-center justify-center space-x-3 text-lg">
+                        <i data-lucide="mail" class="w-6 h-6" style="color: var(--color-brand-orange);"></i>
+                        <span class="font-bold">Email :</span>
+                        <a href="mailto:contact@fasomeublespascher.com" class="hover:underline font-semibold text-gray-700">contact@fasomeublespascher.com</a>
+                    </div>
+                    
+                </div>
+
+                <p class="text-center mt-6 text-sm italic text-gray-500">
+                    Pour suivre nos nouveautés et promotions, rejoignez-nous sur Facebook.
+                </p>
+                   <a href="https://www.facebook.com/profile.php?id=100064332810418" target="_blank"
+                    class="mt-4 flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-bold rounded-full hover:bg-blue-700 transition duration-300 shadow-md">
+                        <i data-lucide="facebook" class="w-5 h-5 mr-2"></i>
+                        Visiter notre Page Facebook
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="py-10 mt-12" style="background-color: var(--color-footer);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left text-white">
+            
+            <div>
+                <h4 class="text-2xl font-bold mb-2">
+                    <span style="color: var(--color-brand-teal);">FASO MEUBLES</span> <span style="color: var(--color-brand-red);">PAS CHER</span>
+                </h4>
+                <p class="text-sm italic mb-4">"Le roi des meubles"</p>
+                
+                <div class="mt-4 pt-4 border-t border-gray-700">
+                    <p class="text-sm font-bold">
+                        Développé par <span style="color: var(--color-brand-orange);">MILLOGO</span>
+                    </p>
+                    <p class="text-xs font-semibold mt-1">
+                        Mon WhatsApp : <a href="https://wa.me/22676984516" class="hover:underline text-yellow-400 font-bold">+226 76 98 45 16</a>
+                    </p>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-lg font-semibold mb-3" style="color: var(--color-brand-teal);">Navigation</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><button class="hover:underline" onclick="showPage('home')">Accueil</button></li>
+                    <li><button class="hover:underline" onclick="showPage('services')">Nos Services</button></li>
+                    <li><button class="hover:underline" onclick="showPage('contact')">Contactez-nous</button></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-lg font-semibold mb-3" style="color: var(--color-brand-teal);">Contact & Adresses</h4>
+                
+                <p class="text-sm">WhatsApp : <a href="https://wa.me/22670372933" class="hover:underline font-bold text-green-400"> +226 70 37 29 33</a></p>
+                <p class="text-sm">Téléphone : <a href="tel:+22670001114" class="hover:underline font-bold"> +226 70 00 11 14</a></p>
+                <p class="text-sm mb-2">Email : <span class="text-white">contact@fasomeublespascher.com</span></p>
+
+                <p class="text-xs mt-2 font-bold">Adresses :</p>
+                <p class="text-xs">OUAGADOUGOU - CISSIN</p>
+                <p class="text-xs">KOURITENGA</p>
+
+
+                <div class="flex justify-center md:justify-start space-x-4 mt-3">
+                    <a href="https://www.facebook.com/profile.php?id=100064332810418" target="_blank" aria-label="Facebook"
+                        class="text-gray-400 hover:text-blue-500 transition duration-300"><i data-lucide="facebook" class="w-6 h-6"></i></a>
+                    <a href="https://wa.me/22670372933" target="_blank" aria-label="WhatsApp Entreprise"
+                        class="text-gray-400 hover:text-green-500 transition duration-300"><i data-lucide="message-square" class="w-6 h-6"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-8 pt-4 border-t border-gray-800 text-xs text-gray-500">
+            &copy; 2025 FASO MEUBLES PAS CHER. Application Web Professionnelle.
+        </div>
+    </footer>
+
+
+    <script>
+        // Initialisation des icônes Lucide
+        lucide.createIcons();
+
+        // --- Fonctionnalité de Navigation (Monopage / Onglets) ---
+        function showPage(pageId) {
+            // Cacher toutes les pages
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.add('hidden');
+            });
+
+            // Afficher la page demandée
+            const activePage = document.getElementById('page-' + pageId);
+            if (activePage) {
+                activePage.classList.remove('hidden');
+            }
+
+            // Mettre à jour les onglets de navigation
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.getAttribute('data-page') === pageId) {
+                    tab.classList.add('active');
+                }
+            });
+            window.scrollTo(0, 0); // Revenir en haut de la page après le changement
+        }
+
+        // --- Fonctionnalité de l'Effet d'Ouverture de Porte (Accordion) ---
+        function toggleContent(blockElement) {
+            // Dans la section 'services', le content est le div avec la classe 'content-hidden'
+            // Dans la section 'photos', le content est le div avec la classe 'content-hidden'
+            const content = blockElement.querySelector('.content-hidden');
+            const header = blockElement.querySelector('.block-header');
+
+            // Si on clique sur un bloc déjà ouvert, on le ferme. Sinon, on l'ouvre.
+            if (content.classList.contains('content-visible')) {
+                // Fermer le bloc
+                content.classList.remove('content-visible');
+                if (header) { // Le header est présent dans les deux types de blocs
+                    header.classList.remove('open');
+                }
+            } else {
+                // Pour la section 'photos', on ferme d'abord tous les autres blocs ouverts
+                if (blockElement.closest('#page-photos')) {
+                    document.querySelectorAll('#page-photos .content-hidden.content-visible').forEach(c => {
+                         c.classList.remove('content-visible');
+                         c.closest('.photo-block').querySelector('.block-header').classList.remove('open');
+                    });
+                } else {
+                    // Pour la section 'services', on ferme tous les autres blocs ouverts (comportement par défaut)
+                    document.querySelectorAll('#page-services .content-hidden.content-visible').forEach(c => {
+                         c.classList.remove('content-visible');
+                         c.closest('.service-block').querySelector('.block-header').classList.remove('open');
+                    });
+                }
+               
+                // Ouvrir le bloc actuel
+                content.classList.add('content-visible');
+                if (header) {
+                    header.classList.add('open');
+                }
+            }
+        }
+
+        // Initialiser l'application sur la page d'accueil au chargement
+        window.onload = function() {
+            showPage('home');
+        };
+    </script>
+</body>
+</html>
